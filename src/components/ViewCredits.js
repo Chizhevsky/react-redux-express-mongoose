@@ -1,9 +1,42 @@
 import React from 'react';
+import { connect } from 'react-redux';
+
+import {fetchCredits} from '../actions/creditActions';
+import {payCredit} from '../actions/creditActions';
+
+@connect((store) => {
+    return {
+        credits: store.credits.credits
+    }
+})
 
 export default class ViewCredits extends React.Component {
+    constructor() {
+        super();
+         this.paying = {
+             name: '',
+             secret: ''
+        };
+    }
+    componentWillMount() {
+        this.props.dispatch(fetchCredits());
+    }
+    componentWillReceiveProps(nextProps) {
+        this.paying = {
+            name: nextProps.credits[0].name,
+            secret: ''
+        };
+    }
+    handleName(e) {
+        this.paying.name = e.target.value;
+    }
+    handleSecret(e) {
+        this.paying.secret = e.target.value;
+    }
     handleForm(e) {
         e.preventDefault();
-
+        this.props.dispatch(payCredit(this.paying.name, this.paying.secret));
+        this.setState({});
     }
     render() {
         return(
@@ -39,24 +72,14 @@ export default class ViewCredits extends React.Component {
                 <form>
                     <p>
                         <label htmlFor="name">Выберети имя</label>
-                        <p><select name="name" id="name">
-                            {
-                                this.props.credits.map( (person) => {
-                                    if (person.month.length !== 0 && person.month.length !== 12) {
-                                        return (
-                                            <option value={person.name}>{person.name}</option>
-                                        )
-                                    }
-                                })
-                            }
-                        </select></p>
+                        <p><input type="text" name="name" id="name" onChange={this.handleName.bind(this)}/></p>
                     </p>
                     <p>
                         <label htmlFor="secret">Введите ключевое слово</label>
-                        <p><input type="text" name="secret" id="secret"/></p>
+                        <p><input type="text" onChange={this.handleSecret.bind(this)} name="secret" id="secret"/></p>
                     </p>
                     <p>
-                        <button onClick={this.handleForm.bind(this)}>Pay</button>
+                        <input type="submit" onClick={this.handleForm.bind(this)}> </input>
                     </p>
                 </form>
             </div>
