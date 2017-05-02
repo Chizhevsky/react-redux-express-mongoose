@@ -1,8 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import {fetchCredits} from '../actions/creditActions';
-import {payCredit} from '../actions/creditActions';
+import {fetchCredits, updateCredits, payCredit} from '../actions/creditActions';
 
 @connect((store) => {
     return {
@@ -19,13 +18,7 @@ export default class ViewCredits extends React.Component {
         };
     }
     componentWillMount() {
-        this.props.dispatch(fetchCredits());
-    }
-    componentWillReceiveProps(nextProps) {
-        this.paying = {
-            name: nextProps.credits[0].name,
-            secret: ''
-        };
+        this.props.dispatch(updateCredits());
     }
     handleName(e) {
         this.paying.name = e.target.value;
@@ -35,15 +28,22 @@ export default class ViewCredits extends React.Component {
     }
     handleForm(e) {
         e.preventDefault();
-        this.props.dispatch(payCredit(this.paying.name, this.paying.secret));
-        this.setState({});
+        let newState = this.props.credits;
+        newState.map( (person) => {
+            if (person.name === this.paying.name) {
+                if (person.secret === this.paying.secret) {
+                    person.month.push(true);
+                }
+            }
+        });
+        this.props.dispatch(payCredit(newState));
     }
     render() {
         return(
             <div>
                 <h1>История всех кредитов в нашем банке</h1>
                 {this.props.credits.map( (person) => {
-                    if (person.month.length === 12) {
+                    if (person.month.length >= 12) {
                         return (
                             <ul>
                                 <li>{person.name}</li>

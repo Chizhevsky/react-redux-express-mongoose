@@ -1,27 +1,36 @@
 export default function reducer(state = {
-    credits: []
+    credits: [
+        {
+            name: 'Alexey Chizhevsky',
+            money: 5000,
+            secret: '',
+            month: [true, true]
+        },
+        {
+            name: 'Dzimtri Safin',
+            money: 9000,
+            secret: '',
+            month: [true]
+        },
+        {
+            name: 'Evgeni Garlukovich',
+            money: 15000,
+            secret: '',
+            month: []
+        }
+    ]
 }, action) {
     switch(action.type){
-        case 'FETCH_CREDITS': {
+        case 'UPDATE_CREDITS': {
+            return {...state}
+        }
+        /*case 'FETCH_CREDITS': {
+            return {...state, credits: action.payload}
+        }*/
+        case 'PAY_CREDIT': {
             return {...state, credits: action.payload}
         }
-        case 'PAY_CREDIT': {
-            let name = action.payload.name,
-                secret = action.payload.secret,
-                i = 0;
-            state.credits.map( (person) => {
-
-                if (person.name === name) {
-                    if (person.secret === secret) {
-                        if (person.month.length < 12) {
-                            person.month.push(true);
-                        }
-                    }
-                }
-                ++i;
-            });
-            return state;
-        }
     }
+
     return state;
 }
