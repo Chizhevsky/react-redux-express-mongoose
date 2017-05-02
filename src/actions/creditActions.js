@@ -32,9 +32,9 @@ export function updateCredits() {
     }
 }*/
 
-export function payCredit(newState) {
+export function payCredit(newCredits) {
     return {
         type: 'PAY_CREDIT',
-        payload: newState
+        payload: newCredits
     }
 }

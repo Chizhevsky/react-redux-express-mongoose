@@ -1,48 +1,60 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import {connect} from 'react-redux';
 
 import {fetchCredits, updateCredits, payCredit} from '../actions/creditActions';
 
 @connect((store) => {
+    console.log(store);
     return {
-        credits: store.credits.credits
+        credits: store.credits.credits,
     }
 })
-
 export default class ViewCredits extends React.Component {
-    constructor() {
-        super();
-         this.paying = {
-             name: '',
-             secret: ''
+    constructor(props) {
+        super(props);
+
+        console.log('constructor:', props);
+
+        this.paying = {
+            name: '',
+            secret: ''
         };
     }
-    componentWillMount() {
-        this.props.dispatch(updateCredits());
+
+    // componentWillMount() {
+    //     this.props.dispatch(updateCredits());
+    // }
+
+    componentWillReceiveProps(nextProps) {
+        console.log('will rec:', nextProps);
     }
+
     handleName(e) {
         this.paying.name = e.target.value;
     }
+
     handleSecret(e) {
         this.paying.secret = e.target.value;
     }
+
     handleForm(e) {
         e.preventDefault();
-        let newState = this.props.credits;
-        newState.map( (person) => {
+        const newCredits = this.props.credits.map((person) => {
             if (person.name === this.paying.name) {
                 if (person.secret === this.paying.secret) {
-                    person.month.push(true);
+                    person.month =  person.month.concat(true);
                 }
             }
+            return person;
         });
-        this.props.dispatch(payCredit(newState));
+        this.props.dispatch(payCredit(newCredits));
     }
+
     render() {
-        return(
+        return (
             <div>
                 <h1>История всех кредитов в нашем банке</h1>
-                {this.props.credits.map( (person) => {
+                {this.props.credits.map((person) => {
                     if (person.month.length >= 12) {
                         return (
                             <ul>
