@@ -1,10 +1,10 @@
 import React from 'react';
 import {connect} from 'react-redux';
+import {Link} from 'react-router';
 
-import {fetchCredits, updateCredits, payCredit} from '../actions/creditActions';
+import {updateCredits, payCredit} from '../actions/creditActions';
 
 @connect((store) => {
-    console.log(store);
     return {
         credits: store.credits.credits,
     }
@@ -12,21 +12,14 @@ import {fetchCredits, updateCredits, payCredit} from '../actions/creditActions';
 export default class ViewCredits extends React.Component {
     constructor(props) {
         super(props);
-
-        console.log('constructor:', props);
-
         this.paying = {
             name: '',
             secret: ''
         };
     }
 
-    // componentWillMount() {
-    //     this.props.dispatch(updateCredits());
-    // }
-
-    componentWillReceiveProps(nextProps) {
-        console.log('will rec:', nextProps);
+    componentWillMount() {
+        this.props.dispatch(updateCredits());
     }
 
     handleName(e) {
@@ -40,10 +33,8 @@ export default class ViewCredits extends React.Component {
     handleForm(e) {
         e.preventDefault();
         const newCredits = this.props.credits.map((person) => {
-            if (person.name === this.paying.name) {
-                if (person.secret === this.paying.secret) {
-                    person.month =  person.month.concat(true);
-                }
+            if (person.name === this.paying.name && person.secret === this.paying.secret && person.month.length <12) {
+                person.month =  person.month.concat(true);
             }
             return person;
         });
@@ -53,6 +44,8 @@ export default class ViewCredits extends React.Component {
     render() {
         return (
             <div>
+                <p><Link to="/">Закрытие</Link></p>
+                <p><Link to="/new">Оформление</Link></p>
                 <h1>История всех кредитов в нашем банке</h1>
                 {this.props.credits.map((person) => {
                     if (person.month.length >= 12) {
