@@ -18,9 +18,7 @@ app.get('/', function(req, res) {
 });
 
 app.post('/', function(req, res) {
-    db.payForCredit(req.body).then(function(data) {
-        console.log(data);
-    })
+    db.payForCredit(req.body);
 });
 
 app.get('/new', function(req, res) {
@@ -30,9 +28,7 @@ app.get('/new', function(req, res) {
 });
 
 app.post('/new', function(req, res) {
-    db.createCredit(req.body).then(function(data) {
-        console.log(data);
-    });
+    db.createCredit(req.body);
 });
 
 var server = app.listen(3000, function() {

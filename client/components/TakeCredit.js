@@ -9,7 +9,6 @@ import {takeCredit, updateCredits} from '../actions/creditActions';
         credits: store.credits.credits,
     }
 })
-
 export default class TakeCredit extends React.Component {
     constructor(props) {
         super(props);
@@ -41,7 +40,7 @@ export default class TakeCredit extends React.Component {
             month: []
         };
         const newCredits = this.props.credits.concat(newCredit);
-        this.props.dispatch(takeCredit(newCredits));
+        this.props.dispatch(takeCredit(newCredits, newCredit));
     }
     render() {
         return (

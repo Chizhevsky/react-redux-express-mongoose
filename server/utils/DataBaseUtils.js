@@ -34,8 +34,12 @@ exports.createCredit = function(data) {
 
 exports.payForCredit = function(data) {
     var credit = mongoose.model('Credit');
-    credit.find({name: data.name}, function(err, credit) {
-        credit.month.push(true);
-        return credit.save();
+    credit.find({"name": data.name}, function(err, person) {
+        person[0].month.push(true);
+        if (person[0].month.length >= 12) {
+            person[0].remove();
+            return true;
+        }
+        return person[0].save();
     });
 };

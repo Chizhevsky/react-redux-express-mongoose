@@ -17,20 +17,18 @@ export default class ViewCredits extends React.Component {
             secret: ''
         };
     }
-
     componentWillMount() {
         this.props.dispatch(updateCredits());
     }
-
     handleName(e) {
         this.paying.name = e.target.value;
     }
-
     handleSecret(e) {
         this.paying.secret = e.target.value;
     }
-
     handleForm(e) {
+        const creditor = this.paying.name,
+            month = this.paying.name;
         e.preventDefault();
         const newCredits = this.props.credits.map((person) => {
             if (person.name === this.paying.name && person.secret === this.paying.secret && person.month.length <12) {
@@ -38,9 +36,8 @@ export default class ViewCredits extends React.Component {
             }
             return person;
         });
-        this.props.dispatch(payCredit(newCredits));
+        this.props.dispatch(payCredit(newCredits, creditor, month));
     }
-
     render() {
         return (
             <div>
